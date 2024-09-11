@@ -95,6 +95,11 @@ SELECT * FROM csv.`${DA.paths.sales_csv}`
 
 -- COMMAND ----------
 
+-- MAGIC %python
+-- MAGIC display(dbutils.fs.ls(DA.paths.sales_csv))
+
+-- COMMAND ----------
+
 CREATE TABLE IF NOT EXISTS sales_csv
   (order_id LONG, email STRING, transactions_timestamp LONG, total_item_quantity INTEGER, purchase_revenue_in_usd DOUBLE, unique_items INTEGER, items STRING)
 USING CSV
@@ -198,7 +203,7 @@ SELECT COUNT(*) FROM sales_csv
 -- MAGIC %md
 -- MAGIC
 -- MAGIC
--- MAGIC At the time we previously queried this data source, Spark automatically cached the underlying data in local storage. This ensures that on subsequent queries, Spark will provide the optimal performance by just querying this local cache.
+-- MAGIC **At the time we previously queried this data source, Spark automatically cached the underlying data in local storage. This ensures that on subsequent queries, Spark will provide the optimal performance by just querying this local cache.**
 -- MAGIC
 -- MAGIC Our external data source is not configured to tell Spark that it should refresh this data. 
 -- MAGIC
