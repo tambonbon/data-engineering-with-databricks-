@@ -50,6 +50,10 @@
 
 -- COMMAND ----------
 
+SELECT * FROM events_raw LIMIT 5
+
+-- COMMAND ----------
+
 CREATE OR REPLACE TEMP VIEW events_strings AS 
 SELECT string(key), string(value) FROM events_raw;
 
@@ -213,6 +217,10 @@ GROUP BY user_id
 
 -- COMMAND ----------
 
+DESCRIBE sales
+
+-- COMMAND ----------
+
 CREATE OR REPLACE TEMP VIEW item_purchases AS
 
 SELECT * 
@@ -221,6 +229,10 @@ INNER JOIN item_lookup b
 ON a.item.item_id = b.item_id;
 
 SELECT * FROM item_purchases
+
+-- COMMAND ----------
+
+DESCRIBE item_lookup
 
 -- COMMAND ----------
 

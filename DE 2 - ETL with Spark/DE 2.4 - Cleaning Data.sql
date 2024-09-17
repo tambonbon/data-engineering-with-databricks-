@@ -45,6 +45,10 @@
 
 -- COMMAND ----------
 
+SELECT * FROM users_dirty LIMIT 5
+
+-- COMMAND ----------
+
 -- MAGIC %md
 -- MAGIC ## Data Overview
 -- MAGIC
@@ -85,7 +89,7 @@ FROM users_dirty
 -- COMMAND ----------
 
 SELECT count_if(email IS NULL) FROM users_dirty;
-SELECT count(*) FROM users_dirty WHERE email IS NULL;
+-- SELECT count(*) FROM users_dirty WHERE email IS NULL;
 
 -- COMMAND ----------
 
@@ -93,7 +97,7 @@ SELECT count(*) FROM users_dirty WHERE email IS NULL;
 -- MAGIC from pyspark.sql.functions import col
 -- MAGIC usersDF = spark.read.table("users_dirty")
 -- MAGIC
--- MAGIC usersDF.selectExpr("count_if(email IS NULL)")
+-- MAGIC usersDF.selectExpr("count_if(email IS NULL)").show()
 -- MAGIC usersDF.where(col("email").isNull()).count()
 
 -- COMMAND ----------
@@ -133,6 +137,7 @@ FROM users_dirty
 WHERE user_id IS NOT NULL
 GROUP BY user_id, user_first_touch_timestamp;
 
+SELECT * FROM deduped_users LIMIT 5;
 SELECT count(*) FROM deduped_users
 
 -- COMMAND ----------

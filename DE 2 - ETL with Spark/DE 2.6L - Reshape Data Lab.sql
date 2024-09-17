@@ -52,6 +52,10 @@
 
 -- COMMAND ----------
 
+SELECT COUNT(*) FROM events
+
+-- COMMAND ----------
+
 -- MAGIC %md
 -- MAGIC
 -- MAGIC ## Pivot events to get event counts for each user
@@ -97,11 +101,31 @@
 
 -- COMMAND ----------
 
--- CREATE OR REPLACE TEMP VIEW events_pivot
--- <FILL_IN>
--- ("cart", "pillows", "login", "main", "careers", "guest", "faq", "down", "warranty", "finalize", 
--- "register", "shipping_info", "checkout", "mattresses", "add_item", "press", "email_coupon", 
--- "cc_info", "foam", "reviews", "original", "delivery", "premium")
+SELECT count_if(event_name is NULL) FROM events;
+
+-- COMMAND ----------
+
+CREATE OR REPLACE TEMP VIEW events_clean AS 
+SELECT DISTINCT(*) FROM events;
+
+-- COMMAND ----------
+
+CREATE OR REPLACE TEMP VIEW events_pivot AS
+
+SELECT user_id AS user, max(cart) as cart, max(pillows) as pillows, max(login) as login, max(main) as main, max(careers) as careers, max(guest) as guest, max(faq) as faq, max(down) as down, max(warranty) as warranty, max(finalize) as finalize, 
+max(register) as register, max(shipping_info) as shipping_info, max(checkout) as checkout, max(mattresses) as mattresses, max(add_item) as add_item, max(press) as press, max(email_coupon) as email_coupon, 
+max(cc_info) as cc_info, max(foam) as foam, max(reviews) as reviews, max(original) as original, max(delivery) as delivery, max(premium) as premium
+FROM events_clean
+PIVOT (COUNT(event_name) FOR event_name IN ("cart", "pillows", "login", "main", "careers", "guest", "faq", "down", "warranty", "finalize", 
+"register", "shipping_info", "checkout", "mattresses", "add_item", "press", "email_coupon", 
+"cc_info", "foam", "reviews", "original", "delivery", "premium")
+)
+GROUP BY user_id
+
+;
+
+SELECT COUNT(*) FROM events_pivot;
+SELECT * FROM events_pivot LIMIT 50
 
 -- COMMAND ----------
 
@@ -120,9 +144,11 @@
 
 -- MAGIC %python
 -- MAGIC # TODO
--- MAGIC # (spark.read
--- MAGIC #     <FILL_IN>
--- MAGIC #     .createOrReplaceTempView("events_pivot"))
+-- MAGIC (spark.read.table("events")
+-- MAGIC     .groupBy("user_id")
+-- MAGIC     .pivot("event_name")
+-- MAGIC     .count("event_name")
+-- MAGIC     .createOrReplaceTempView("events_pivot"))
 
 -- COMMAND ----------
 
