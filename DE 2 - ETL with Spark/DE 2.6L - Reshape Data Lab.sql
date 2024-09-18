@@ -204,8 +204,17 @@ SELECT * FROM events_pivot LIMIT 50
 
 -- COMMAND ----------
 
--- CREATE OR REPLACE TEMP VIEW clickpaths AS
+DESCRIBE transactions;
+
+-- COMMAND ----------
+
+CREATE OR REPLACE TEMP VIEW clickpaths AS
+SELECT * FROM events_pivot INNER JOIN transactions ON events_pivot.user = transactions.user_id
 -- <FILL_IN>
+
+-- COMMAND ----------
+
+SELECT COUNT(*) FROM clickpaths;
 
 -- COMMAND ----------
 
